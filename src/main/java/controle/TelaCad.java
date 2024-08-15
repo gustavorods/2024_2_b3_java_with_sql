@@ -6,6 +6,8 @@
     import javax.swing.text.MaskFormatter;
 
     import conexao.conexao;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
     import javax.swing.table.DefaultTableModel;
 
@@ -18,6 +20,7 @@
         JTextField tcodigo, tnome, temail;
         JFormattedTextField tel, data;
         MaskFormatter mTel, mData;
+        JButton btnPrimeiro, btnAnterior, btnProximo, btnUltimo;
         
         JTable tblClientes;
         JScrollPane scp_tabela;
@@ -30,6 +33,7 @@
             Container tela = getContentPane();
             tela.setLayout(null); // Usando layout nulo
             
+            
             // Código 
             rCodigo = new JLabel("Código: ");
             rCodigo.setBounds(50, 50, 50, 30);
@@ -38,6 +42,7 @@
             tcodigo = new JTextField();
             tcodigo.setBounds(130, 50, 60, 25);
             tela.add(tcodigo);
+            
             
             // Nome
             rNome = new JLabel("Nome: ");
@@ -48,6 +53,7 @@
             tnome.setBounds(130, 90, 170, 25);
             tela.add(tnome);
         
+            
             // Data
             rData = new JLabel("Data: ");
             rData.setBounds(50, 130, 50, 30);
@@ -62,6 +68,7 @@
                 e.printStackTrace();
             }
 
+            
             // Telefone
             rTel = new JLabel("Telefone: ");
             rTel.setBounds(50, 170, 80, 30);
@@ -76,6 +83,7 @@
                 e.printStackTrace();
             }
             
+            
             // Email 
             rEmail = new JLabel("Email: ");
             rEmail.setBounds(50, 210, 50, 30);
@@ -84,6 +92,69 @@
             temail = new JTextField();
             temail.setBounds(130, 210, 200, 25);
             tela.add(temail);
+            
+            
+            // Botões de navegação entre itens da tabela
+            btnPrimeiro = new JButton("Primeiro");
+            btnPrimeiro.setBounds(400, 50, 100, 25);
+            tela.add(btnPrimeiro);
+            btnPrimeiro.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                    con_cliente.resultset.first();
+                    mostrar_Dados();
+                    }
+                    catch(SQLException erro) {
+                       JOptionPane.showMessageDialog(null,"Não foi possível posicionar no primeiro registro:"+erro,"Mensagem do Programa",JOptionPane.INFORMATION_MESSAGE);            
+                    }
+                }
+            });
+            
+            btnAnterior = new JButton("Anterior");
+            btnAnterior.setBounds(400, 90, 100, 25);
+            tela.add(btnAnterior);
+            btnAnterior.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                    con_cliente.resultset.previous();
+                    mostrar_Dados();
+                    }
+                    catch(SQLException erro) {
+                       JOptionPane.showMessageDialog(null,"Não foi possível posicionar no primeiro registro:"+erro,"Mensagem do Programa",JOptionPane.INFORMATION_MESSAGE);            
+                    }
+                }
+            });
+            
+            btnProximo = new JButton("Próximo");
+            btnProximo.setBounds(400, 130, 100, 25);
+            tela.add(btnProximo);
+            btnProximo.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                    con_cliente.resultset.next();
+                    mostrar_Dados();
+                    }
+                    catch(SQLException erro) {
+                       JOptionPane.showMessageDialog(null,"Não foi possível posicionar no primeiro registro:"+erro,"Mensagem do Programa",JOptionPane.INFORMATION_MESSAGE);            
+                    }
+                }
+            });
+            
+            btnUltimo = new JButton("Último");
+            btnUltimo.setBounds(400, 170, 100, 25);
+            tela.add(btnUltimo);
+            btnUltimo.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                    con_cliente.resultset.last();
+                    mostrar_Dados();
+                    }
+                    catch(SQLException erro) {
+                       JOptionPane.showMessageDialog(null,"Não foi possível posicionar no primeiro registro:"+erro,"Mensagem do Programa",JOptionPane.INFORMATION_MESSAGE);            
+                    }
+                }
+            });
+            
             
             // Configuração da JTable
             tblClientes = new JTable();
@@ -113,6 +184,7 @@
             
             tblClientes.setAutoCreateRowSorter(true);
 
+            
             // Configurações do JFrame
             setSize(800, 600);
             setResizable(false);
@@ -122,7 +194,7 @@
             
             con_cliente.executaSQL("select * from tbclientes order by cod");
             preencherTabela();
-            
+            posicionarRegistro();
 
         }
         
@@ -149,6 +221,30 @@
                 }
             }catch(SQLException erro) {
                 JOptionPane.showMessageDialog(null,"\n Erro ao listar dados da tabela!! :\n "+erro,"Mensagem doPrograma",JOptionPane.INFORMATION_MESSAGE);        }
+        }
+        
+        public void posicionarRegistro() {
+            try {
+                con_cliente.resultset.first();
+                mostrar_Dados();
+            }
+            catch(SQLException erro) {
+               JOptionPane.showMessageDialog(null,"Não foi possível posicionar no primeiro registro:"+erro,"Mensagem do Programa",JOptionPane.INFORMATION_MESSAGE);            
+            }
+        }
+        
+        public void mostrar_Dados() {
+            try {
+                tcodigo.setText(con_cliente.resultset.getString("cod"));
+                tnome.setText(con_cliente.resultset.getString("nome"));
+                data.setText(con_cliente.resultset.getString("dt_nasc"));              
+                tel.setText(con_cliente.resultset.getString("telefone"));
+                temail.setText(con_cliente.resultset.getString("email"));
+
+            }
+            catch(SQLException erro) {
+                JOptionPane.showMessageDialog(null,"Não localizou dados: "+erro,"Mensagem doPrograma",JOptionPane.INFORMATION_MESSAGE);            
+            }
         }
 
         
