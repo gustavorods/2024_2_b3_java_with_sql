@@ -20,7 +20,7 @@ import java.awt.event.ActionListener;
         JTextField tcodigo, tnome, temail;
         JFormattedTextField tel, data;
         MaskFormatter mTel, mData;
-        JButton btnPrimeiro, btnAnterior, btnProximo, btnUltimo;
+        JButton btnPrimeiro, btnAnterior, btnProximo, btnUltimo, btnLimpar, btnNovoRes, btnGravar, btnAlterar, btnExcluir;
         
         JTable tblClientes;
         JScrollPane scp_tabela;
@@ -152,6 +152,21 @@ import java.awt.event.ActionListener;
                     catch(SQLException erro) {
                        JOptionPane.showMessageDialog(null,"Não foi possível posicionar no primeiro registro:"+erro,"Mensagem do Programa",JOptionPane.INFORMATION_MESSAGE);            
                     }
+                }
+            });
+            
+            
+            // Botões de interagir com dados 
+            btnLimpar = new JButton("Limpar");
+            btnLimpar.setBounds(550,50,100,25);
+            tela.add(btnLimpar);
+            btnLimpar.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    tcodigo.setText("");
+                    tnome.setText("");
+                    temail.setText("");
+                    data.setText("");
+                    tel.setText("");
                 }
             });
             
