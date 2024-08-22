@@ -425,7 +425,7 @@ public class TelaCad extends JFrame  {
     }
 
     
-    public static void main(String[] args) {
-        new TelaCad();
-    }
+//    public static void main(String[] args) {
+//        new TelaCad();
+//    }
 }
